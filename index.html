@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05060f">
+  <meta name="description" content="So‘zni top — yashirin so‘zni harflar bo‘yicha topish o‘yini">
+  <title>So‘zni top</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a84ff'/%3E%3Cstop offset='1' stop-color='%23bf5af2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-size='34' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="blob b4"></span>
+  </div>
+
+  <div class="island" id="island" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span class="txt" id="islandText"></span>
+  </div>
+
+  <main class="app">
+    <header class="top glass">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>So‘zni top</h1>
+          <p>Yashirin so‘zni harflar bo‘yicha toping</p>
+        </div>
+      </div>
+      <button class="icon-btn" id="rulesBtn" aria-label="Qoidalar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.4"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>
+      </button>
+    </header>
+
+    <section class="stats">
+      <div class="stat glass"><span>Ball</span><b id="score">0</b></div>
+      <div class="stat glass"><span>Seriya</span><b id="streak">0</b></div>
+      <div class="stat glass"><span>Rekord</span><b id="best">0</b></div>
+    </section>
+
+    <nav class="segmented glass" id="cats" aria-label="Turkumlar">
+      <span class="thumb" id="thumb"></span>
+    </nav>
+
+    <section class="board glass" id="board">
+      <div class="board-head">
+        <span class="badge" id="catBadge"></span>
+        <div class="lives" id="lives" aria-label="Qolgan urinishlar"></div>
+      </div>
+      <p class="hint" id="hint"></p>
+      <div class="word" id="word" aria-label="Yashirin so‘z"></div>
+      <div class="actions">
+        <button class="pill" id="hintBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3Z"/></svg>
+          Yordam <small id="hintLeft">2</small>
+        </button>
+        <button class="pill ghost" id="newBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+          Yangi so‘z
+        </button>
+      </div>
+    </section>
+
+    <section class="keyboard glass" id="keyboard" aria-label="Harflar"></section>
+
+    <footer class="foot">Mamadaliyev Ramzbek · 26-161 · HTML / CSS / JS</footer>
+  </main>
+
+  <div class="backdrop" id="backdrop"></div>
+
+  <div class="sheet glass" id="result" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="grabber"></div>
+    <div class="emoji" id="resultEmoji"></div>
+    <h2 id="resultTitle"></h2>
+    <div class="answer" id="resultWord"></div>
+    <p id="resultHint"></p>
+    <div class="chips" id="resultChips"></div>
+    <button class="pill big" id="nextBtn">Keyingi so‘z</button>
+  </div>
+
+  <div class="sheet glass" id="rules" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+    <div class="grabber"></div>
+    <h2 id="rulesTitle">Qanday o‘ynaladi?</h2>
+    <ol class="rules-list">
+      <li>Turkumni tanlang yoki «Hammasi»da qoldiring.</li>
+      <li>Ta’rifni o‘qing va harflarni bosing.</li>
+      <li>Harf so‘zda bo‘lsa — ochiladi, bo‘lmasa — bitta yurak ketadi.</li>
+      <li>6 ta xatogacha huquqingiz bor.</li>
+      <li>«Yordam» bitta harfni ochadi, lekin 5 ball oladi.</li>
+      <li>Ketma-ket topsangiz, seriya bonusi qo‘shiladi.</li>
+    </ol>
+    <p class="small">Klaviaturadan ham yozish mumkin: <b>C</b> — ch, <b>W</b> — sh, <b>Enter</b> — keyingi so‘z.</p>
+    <button class="pill big" id="rulesClose">Tushunarli</button>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="words.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
